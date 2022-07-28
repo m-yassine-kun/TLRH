@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker";
 import Chart from "chart.js/auto";
+import { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
+import ReportingService from "../services/ReportingService";
 
 const ChartGraph = (data, options) => {
   return (
@@ -14,13 +16,42 @@ const ChartGraph = (data, options) => {
 };
 
 const labels = ["Féminin", "Masculin"];
-const PosteAPPEvolution = () => {
+
+const RatioFM = () => {
+  const [datas, setDatas] = useState(null);
+  const [loading, setloading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setloading(true);
+      try {
+        //data could use some time to render so we use the await
+        //so we convert the method to async
+        const response = await ReportingService.getSexe();
+        setDatas(response.data);
+        console.log(datas);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+      setloading(false);
+    };
+    fetchData();
+    console.log(datas);
+  }, [datas]);
+
+  const resData = [datas.F, datas.M];
+  //const resData = [12, 34];
+
   const data = {
     labels: labels,
     datasets: [
       {
         label: "Dataset 1",
-        data: labels.map(() => faker.datatype.number({ min: 10, max: 100 })),
+        //  ReportingService.getSexe()
+        //labels.map(() => faker.datatype.number({ min: 10, max: 100 }))
+        data: resData,
+
         backgroundColor: ["rgba(255, 99, 132, 0.5)", "rgb(54, 162, 235)"],
       },
     ],
@@ -47,9 +78,9 @@ const PosteAPPEvolution = () => {
         Le Ratio Féminin Masculin
       </h1>
 
-      {ChartGraph(data, options)}
+      {!loading && ChartGraph(data, options)}
     </div>
   );
 };
 
-export default PosteAPPEvolution;
+export default RatioFM;

@@ -5,6 +5,7 @@ import com.tlrh.backend.dto.CollabDTO;
 import com.tlrh.backend.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -51,21 +52,16 @@ public class CollaborateurService {
 
 
     public void saveCollab(CollabDTO collabDTO){
-        Collaborateur collab = collabDTO.getCollab();
-        //collab.setSalaires(collabDTO.getSalaires());
-        collab.addSalaires(collabDTO.getSalaires());
-        collab.addPosts(collabDTO.getPostes());
-        collab.addCompetences(collabDTO.getCompetences());
-        collab.addDiplomes(collabDTO.getDiplomes());
+        Collaborateur collaborateur = collabDTO.getCollab();
+        collaborateur.addSalaires(collabDTO.getSalaires());
+        collaborateur.addPosts(collabDTO.getPostes());
+        collaborateur.addCompetences(collabDTO.getCompetences());
+        collaborateur.addDiplomes(collabDTO.getDiplomes());
+        //collaborateur.addPostAPPs(collabDTO.getPosteAPPs());
 
 
-        /*for(Salaire sal : collab.getSalaires()){
-            sal.setCollaborateur(collab);
-            salaireRepository.save(sal);
-        }*/
 
-        collaborateursRepository.save(collab);
-
+        collaborateursRepository.save(collaborateur);
         System.out.println("Saved :) ");
     }
 

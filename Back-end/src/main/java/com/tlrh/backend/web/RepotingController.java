@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(value="/rapports")
 public class RepotingController {
@@ -37,7 +38,6 @@ public class RepotingController {
     public List<Competence> getCompetences(@PathVariable(value="id")Long id) {
         return reportingService.getComptences(id);
     }
-
 
     @GetMapping("/sexe")
     public Map<Character,Integer> getSexe() {

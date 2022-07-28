@@ -20,14 +20,20 @@ public class Collaborateur {
     @Column
     private char sexe;
 
-    @Column
-    @OneToMany(mappedBy = "collaborateur")
-    private List<Salaire> salaires;
 
-    @OneToMany(mappedBy = "collaborateur")
+    @OneToMany(mappedBy = "collaborateur",cascade = CascadeType.ALL)
+    @Getter(value = AccessLevel.NONE)
+    @Setter(value = AccessLevel.NONE)
+    private List<Salaire> salaires=new ArrayList<>();
+
+    @OneToMany(mappedBy = "collaborateur",cascade = CascadeType.ALL)
+    @Getter(value = AccessLevel.NONE)
+    @Setter(value = AccessLevel.NONE)
     private List<Post> postes=new ArrayList<>();
 
-    @OneToMany(mappedBy = "collaborateur")
+    @OneToMany(mappedBy = "collaborateur",cascade = CascadeType.ALL)
+    @Getter(value = AccessLevel.NONE)
+    @Setter(value = AccessLevel.NONE)
     private  List<PosteAPP>  posteAPPs=new ArrayList<>();
 
     @OneToMany(mappedBy = "collaborateur",cascade = CascadeType.ALL)
@@ -35,7 +41,7 @@ public class Collaborateur {
     @Setter(value = AccessLevel.NONE)
     private List<Competence> competences = new ArrayList<>();
 
-    @OneToMany(mappedBy = "collaborateur",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "collaborateur",cascade = CascadeType.ALL) //
     @Getter(value = AccessLevel.NONE)
     @Setter(value = AccessLevel.NONE)
     private List<Diplome> diplomes = new ArrayList<>();
@@ -43,38 +49,25 @@ public class Collaborateur {
 
 
 
-    public void updateSalaire(Salaire newSalaire){
-        newSalaire.setCollaborateur(this);
-        this.salaires.add(0,newSalaire);
-    }
-    public void updatePost(Post newPost){
-        newPost.setCollaborateur(this);
-        this.postes.add(0,newPost);
-    }
-    public void updatePostAPP(PosteAPP newPostAPP){
-        newPostAPP.setCollaborateur(this);
-        this.posteAPPs.add(0,newPostAPP);
-    }
-
     public void addSalaires(List<Salaire> salaire1) {
         for(Salaire sal : salaire1){
             sal.setCollaborateur(this);
             //updateSalaire(sal);
-            this.salaires.add(sal);
+            salaires.add(sal);
         }
     }
     public void addPosts(List<Post> poste1){
 
         for(Post p : poste1){
             p.setCollaborateur(this);
-            updatePost(p);
+            postes.add(p);
         }
     }
     public void addPostAPPs(List<PosteAPP> posteAPP1){
 
         for(PosteAPP pAPP : posteAPP1){
             pAPP.setCollaborateur(this);
-            updatePostAPP(pAPP);
+            posteAPPs.add(pAPP);
         }
     }
 
