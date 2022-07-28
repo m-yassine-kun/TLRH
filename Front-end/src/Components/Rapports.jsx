@@ -3,8 +3,8 @@ import { useNavigate } from "react-router";
 const Rapports = () => {
   const navigate = useNavigate();
   return (
-    <div className="mx-8 my-8 grid grid-cols-3 gap-8 content-center">
-      <h1 className="text-2xl m-auto col-span-3 font-bold ">
+    <div className="mx-8 my-8 grid lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 gap-8 content-center">
+      <h1 className="text-2xl mx-auto lg:col-span-4 sm:col-span-1 md:col-span-2 font-bold ">
         Bilans de compétences
       </h1>
 

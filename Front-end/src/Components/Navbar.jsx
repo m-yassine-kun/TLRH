@@ -1,13 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import Login from "./Login";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
@@ -66,21 +60,21 @@ const Navbar = () => {
             }`}
           >
             <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
-              <li className="text-white hover:text-indigo-200">
-                <a href="#">Home</a>
-              </li>
-              <li className="text-white hover:text-indigo-200">
-                <a href="#">Collaborateurs</a>
-              </li>
-              <li className="text-white hover:text-indigo-200">
-                <a href="#">Managers</a>
-              </li>
-              <li className="text-white hover:text-indigo-200">
-                <a href="#">Admins</a>
-              </li>
-              <li className="text-white hover:text-indigo-200">
-                <a href="/rapports">Rapports</a>
-              </li>
+              <Link className="text-white hover:text-indigo-200" to="/">
+                Home
+              </Link>
+              <Link className="text-white hover:text-indigo-200" to="/">
+                Collaborateurs
+              </Link>
+              <Link className="text-white hover:text-indigo-200" to="/">
+                Managers
+              </Link>
+              <Link className="text-white hover:text-indigo-200" to="/">
+                Admins
+              </Link>
+              <Link className="text-white hover:text-indigo-200" to="/rapports">
+                Rapports
+              </Link>
             </ul>
 
             <div className="mt-3 space-y-2 lg:hidden md:hidden sm:inline-block">

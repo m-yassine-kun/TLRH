@@ -17,24 +17,29 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/rapports" element={<Rapports />} />
-          <Route path="/rapports/salaire" element={<Salaire />} />
-          <Route path="/rapports/posteApp" element={<PosteAPPEvolution />} />
-          <Route path="/rapports/competence" element={<MatriceCompetence />} />
-          <Route path="/rapports/recrutement" element={<Recrutement />} />
-          <Route path="/rapports/technologie" element={<Technologie />} />
-          <Route path="/rapports/etudes" element={<Etudes />} />
-          <Route
-            path="/rapports/ratioFemininMasculin"
-            element={<RatioFemininMasculin />}
-          />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-        <Footer />
+        <div className="flex flex-col h-full ">
+          <Navbar />
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/resetPassword" element={<ResetPassword />} />
+            <Route path="/rapports" element={<Rapports />} />
+            <Route path="/rapports/salaire" element={<Salaire />} />
+            <Route path="/rapports/posteApp" element={<PosteAPPEvolution />} />
+            <Route
+              path="/rapports/competence"
+              element={<MatriceCompetence />}
+            />
+            <Route path="/rapports/recrutement" element={<Recrutement />} />
+            <Route path="/rapports/technologie" element={<Technologie />} />
+            <Route path="/rapports/etudes" element={<Etudes />} />
+            <Route
+              path="/rapports/ratioFemininMasculin"
+              element={<RatioFemininMasculin />}
+            />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+          <Footer className="mt-auto" />
+        </div>
       </BrowserRouter>
     </>
   );
