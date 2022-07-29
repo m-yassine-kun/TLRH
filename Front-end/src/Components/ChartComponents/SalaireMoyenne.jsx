@@ -55,7 +55,7 @@ const generateStartEnd = (startValue, endValue) => {
   return list;
 };
 
-const SalaireMoyenne = ({ data, options }) => {
+const SalaireMoyenne = ({ data, options, name }) => {
   const newData = { ...data };
   const labels = newData["labels"];
   const n = labels.length;
@@ -161,8 +161,8 @@ const SalaireMoyenne = ({ data, options }) => {
       {/* Components of table and chart of moy Evolution  */}
 
       <h1 className=" text-2xl m-2 mb-4 text-center col-span-2 font-bold ">
-        La moyenne d'évolution de salaire du collaborateur{" "}
-        {faker.name.firstName()} sur {dateFin - dateDebut + 1}{" "}
+        La moyenne d'évolution de salaire du collaborateur {name} sur{" "}
+        {dateFin - dateDebut + 1}{" "}
         {dateFin - dateDebut + 1 < 2 ? "année " : "années "}est{" "}
         <span className="text-red-600">
           {moyenneSurDureeData(dateDebut, dateFin)}

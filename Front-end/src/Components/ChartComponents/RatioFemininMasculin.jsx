@@ -3,6 +3,9 @@ import Chart from "chart.js/auto";
 import { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import ReportingService from "../services/ReportingService";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import * as ReactBootStrap from "react-bootstrap";
 
 const ChartGraph = (data, options) => {
   return (
@@ -18,27 +21,27 @@ const ChartGraph = (data, options) => {
 const labels = ["Féminin", "Masculin"];
 
 const RatioFM = () => {
-  const [datas, setDatas] = useState(null);
+  const [datas, setDatas] = useState([0, 0]);
   const [loading, setloading] = useState(true);
 
+  const fetchData = async () => {
+    setloading(true);
+    try {
+      //data could use some time to render so we use the await
+      //so we convert the method to async
+      const response = await ReportingService.getSexe();
+      setDatas(response.data);
+      //console.log(datas);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+    setloading(false);
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      setloading(true);
-      try {
-        //data could use some time to render so we use the await
-        //so we convert the method to async
-        const response = await ReportingService.getSexe();
-        setDatas(response.data);
-        console.log(datas);
-        console.log(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-      setloading(false);
-    };
     fetchData();
-    console.log(datas);
-  }, [datas]);
+    //console.log(datas);
+  }, []);
 
   const resData = [datas.F, datas.M];
   //const resData = [12, 34];
@@ -78,7 +81,13 @@ const RatioFM = () => {
         Le Ratio Féminin Masculin
       </h1>
 
-      {!loading && ChartGraph(data, options)}
+      {!loading ? (
+        ChartGraph(data, options)
+      ) : (
+        <div className="text-center m-auto p-1 ">
+          <ReactBootStrap.Spinner animation="border" />
+        </div>
+      )}
     </div>
   );
 };

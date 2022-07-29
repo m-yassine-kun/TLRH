@@ -1,26 +1,33 @@
 import axios from "axios";
 
 const REPORTING_API_BASE_URL = "http://localhost:8080/rapports/";
+const Collabs_API_BASE_URL = "http://localhost:8080/collabs/";
 
 class EmployeeService {
-  saveEmployee(employee) {
-    return axios.post(REPORTING_API_BASE_URL, employee);
+  getCompetenceById(id) {
+    return axios.get(REPORTING_API_BASE_URL + "competence/" + id);
   }
 
   getSexe() {
     return axios.get(REPORTING_API_BASE_URL + "sexe");
   }
-
-  deleteEmployee(id) {
-    return axios.delete(REPORTING_API_BASE_URL + "/" + id);
+  getCompetences() {
+    return axios.get(REPORTING_API_BASE_URL + "competences");
   }
 
-  getEmployeeById(id) {
-    return axios.get(REPORTING_API_BASE_URL + "/" + id);
+  getDiplomes() {
+    return axios.get(REPORTING_API_BASE_URL + "diplomes");
   }
 
-  updateEmployee(employee, id) {
-    return axios.put(REPORTING_API_BASE_URL + "/" + id, employee);
+  getPosteAPPById(id) {
+    return axios.get(REPORTING_API_BASE_URL + "poste/" + id);
+  }
+  getSalaireById(id) {
+    return axios.get(REPORTING_API_BASE_URL + "salaire/" + id);
+  }
+
+  getCollabById(id) {
+    return axios.get(Collabs_API_BASE_URL + "getCollab/" + id);
   }
 }
 

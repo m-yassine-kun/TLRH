@@ -1,9 +1,6 @@
 package com.tlrh.backend.web;
 
-import com.tlrh.backend.entities.Competence;
-import com.tlrh.backend.entities.Post;
-import com.tlrh.backend.entities.PosteAPP;
-import com.tlrh.backend.entities.Salaire;
+import com.tlrh.backend.entities.*;
 import com.tlrh.backend.service.ReportingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +34,14 @@ public class RepotingController {
     @GetMapping("/competence/{id}")
     public List<Competence> getCompetences(@PathVariable(value="id")Long id) {
         return reportingService.getComptences(id);
+    }
+    @GetMapping("/competences")
+    public List<Competence> getCompetences() {
+        return reportingService.getComptences();
+    }
+    @GetMapping("/diplomes")
+    public List<Diplome> getDiplomes() {
+        return reportingService.getDiplomes();
     }
 
     @GetMapping("/sexe")

@@ -15,6 +15,10 @@ public class ReportingService {
     CollaborateurService collaborateurService;
     @Autowired
     CollabRepo collabRepo;
+    @Autowired
+    CompetenceRepo competenceRepo;
+    @Autowired
+    DiplomeRepo diplomeRepo;
 
     public List<Salaire> getSalaires(Long id) {
         return collaborateurService.getSalaires(id);
@@ -29,9 +33,15 @@ public class ReportingService {
     public List<Diplome> getDiplomes(Long id) {
         return collaborateurService.getDiplomes(id);
     }
+    public List<Diplome> getDiplomes() {
+        return diplomeRepo.findAll();
+    }
 
     public List<Competence> getComptences(Long id) {
         return collaborateurService.getComptences(id);
+    }
+    public List<Competence> getComptences() {
+        return competenceRepo.findAll();
     }
 
     public Map<Character,Integer> getSexe() {

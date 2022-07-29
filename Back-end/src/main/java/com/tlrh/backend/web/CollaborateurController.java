@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(value="/collabs")
 //@CrossOrigin
@@ -30,6 +30,11 @@ public class CollaborateurController {
     @GetMapping("/getCollabs")
     public List<Collaborateur> getCollabs (){
         return collaborateursService.getCollabs();
+    }
+
+    @GetMapping("/getCollab/{id}")
+    public Collaborateur getCollabById (@PathVariable(value="id")Long id){
+        return collaborateursService.getCollabById(id);
     }
 
     @PostMapping("/saveCollab")

@@ -1,63 +1,48 @@
 import { faker } from "@faker-js/faker";
-
-const labels = [...Array(6).keys()].map(() =>
-  faker.datatype.number({ min: 20, max: 100 })
-);
-const Table = (data) => {
-  return (
-    <table className="min-w-full table-auto p-1">
-      <thead className="bg-gray-50">
-        <tr>
-          <th className=" text-left font-medium text-gray-500 upeprcase tracking-wider p-2">
-            Compétences
-          </th>
-          <th className=" text-left font-medium text-gray-500 upeprcase tracking-wider p-2">
-            Niveau d’expertise
-          </th>
-        </tr>
-      </thead>
-      <tbody className="bg-white">
-        {data["labels"].map((e) => (
-          <tr key={faker.datatype.uuid()}>
-            <td className="text-left font-medium text-gray-500 upeprcase tracking-wider p-2">
-              {faker.commerce.productName()}
-            </td>
-            <td className="text-left font-medium text-gray-500 upeprcase tracking-wider p-2">
-              {e}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
+import ReportingService from "../services/ReportingService";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import * as ReactBootStrap from "react-bootstrap";
 
 const MatriceCompetence = () => {
-  const data = {
-    labels: labels,
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 30 })),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "bottom",
-      },
-      title: {
-        display: false,
-        position: "bottom",
-        text: "Chart.js Line Chart",
-      },
+  const { id } = useParams();
+  const [datas, setDatas] = useState([
+    {
+      id: id,
+      competenceName: "",
+      expertise: "",
     },
+  ]);
+  const [loading, setloading] = useState(true);
+
+  const fetchData = async () => {
+    setloading(true);
+    try {
+      //data could use some time to render so we use the await
+      //so we convert the method to async
+      const response = await ReportingService.getCompetenceById(id);
+      setDatas(response.data);
+      //console.log(datas);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+    setloading(false);
   };
+  useEffect(() => {
+    fetchData();
+    //console.log(datas);
+  }, []);
+
+  //const data = [generateRes(40)];
+  console.log(datas);
+
+  const columns = [
+    { dataField: "competenceName", text: "Compétences" },
+    { dataField: "expertise", text: "Niveau d’expertise" },
+  ];
   return (
     <div className="mx-2 my-2 ">
       {/* Components of table and chart of Evolution  */}
@@ -71,7 +56,21 @@ const MatriceCompetence = () => {
         <h2 className="text-xl m-2 text-center font-bold ">
           Table de l'évolution de la Matrice de Compétence
         </h2>
-        {Table(data)}
+
+        {!loading ? (
+          <BootstrapTable
+            keyField="id"
+            data={datas}
+            columns={columns}
+            pagination={paginationFactory()}
+          ></BootstrapTable>
+        ) : (
+          <div className="text-center m-auto p-1 ">
+            <ReactBootStrap.Spinner animation="border" />
+          </div>
+        )}
+
+        {/* {Table(data)} */}
       </div>
     </div>
   );

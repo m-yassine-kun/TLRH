@@ -32,6 +32,9 @@ public class CollaborateurService {
     public List<Collaborateur> getCollabs() {
         return collaborateursRepository.findAll();
     }
+    public Collaborateur getCollabById(Long id) {
+        return collaborateursRepository.findById(id).get();
+    }
     public List<Salaire> getSalaires(Long id) {
         return salaireRepository.findAllByCollaborateur_Id(id);
     }

@@ -23,10 +23,13 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/resetPassword" element={<ResetPassword />} />
             <Route path="/rapports" element={<Rapports />} />
-            <Route path="/rapports/salaire" element={<Salaire />} />
-            <Route path="/rapports/posteApp" element={<PosteAPPEvolution />} />
+            <Route path="/rapports/salaire/:id" element={<Salaire />} />
             <Route
-              path="/rapports/competence"
+              path="/rapports/posteApp/:id"
+              element={<PosteAPPEvolution />}
+            />
+            <Route
+              path="/rapports/competence/:id"
               element={<MatriceCompetence />}
             />
             <Route path="/rapports/recrutement" element={<Recrutement />} />

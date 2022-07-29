@@ -1,29 +1,72 @@
-import { faker } from "@faker-js/faker";
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import ReportingService from "../services/ReportingService";
+
 import SalaireEvolution from "./SalaireEvolution";
 import SalaireMoyenne from "./SalaireMoyenne";
 
-const start = 2000;
-const end = 2022;
-const labels = [...Array(end - start + 1).keys()].map((x) => x + start);
+const generateValues = (dataArray) => {
+  const datePosts = [];
+  const posteName = [];
+  dataArray.forEach((e) => {
+    datePosts.push(e["dateSalaire"]);
+    posteName.push(e["salaire"]);
+  });
+
+  return [datePosts.reverse(), posteName.reverse()];
+};
 
 const Salaire = () => {
+  const { id } = useParams();
   const [type, setType] = useState("0");
+  const [datas, setDatas] = useState([
+    {
+      id: id,
+      dateSalaire: "",
+      salaire: "",
+    },
+  ]);
+  const [collab, setcollab] = useState([
+    {
+      id: id,
+      name: "",
+      dateEmbauche: "",
+      sexe: "",
+    },
+  ]);
+  const [loading, setloading] = useState(true);
+
+  const fetchData = async () => {
+    setloading(true);
+    try {
+      const response1 = await ReportingService.getSalaireById(id);
+      setDatas(response1.data);
+      const response2 = await ReportingService.getCollabById(id);
+      setcollab(response2.data);
+      console.log(response2.data);
+    } catch (error) {
+      console.log(error);
+    }
+    setloading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const columns = [
+    { dataField: "salaire", text: "Salaire" },
+    { dataField: "dateSalaire", text: "Date du Salaire" },
+  ];
 
   const data = {
-    labels: labels,
+    labels: generateValues(datas)[0],
     datasets: [
       {
         label: "Dataset 1",
-        data: labels.map(() => faker.datatype.number({ min: 200, max: 10000 })),
+        data: generateValues(datas)[1],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Dataset 2",
-        data: labels.map(() => faker.datatype.number({ min: 200, max: 10000 })),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
@@ -41,6 +84,7 @@ const Salaire = () => {
       },
     },
   };
+
   return (
     <div>
       <form className="w-full m-auto p-4 col-span-2 ">
@@ -77,12 +121,25 @@ const Salaire = () => {
             </div>
           </div>
         </fieldset>
-        {/* <h1>{type}</h1> */}
       </form>
       {type == 1 ? (
-        <SalaireEvolution data={data} options={options} />
+        <SalaireEvolution
+          name={collab["name"]}
+          datas={datas}
+          data={data}
+          options={options}
+          columns={columns}
+          loading={loading}
+        />
       ) : type == 2 ? (
-        <SalaireMoyenne data={data} options={options} />
+        <SalaireMoyenne
+          datas={datas}
+          name={collab["name"]}
+          data={data}
+          options={options}
+          columns={columns}
+          loading={loading}
+        />
       ) : (
         <h2 className="text-xl m-2 text-center font-bold  ">
           Merci de choisir un type à afficher.
