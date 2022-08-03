@@ -1,5 +1,3 @@
-import { faker } from "@faker-js/faker";
-import Chart from "chart.js/auto";
 import { Doughnut } from "react-chartjs-2";
 import { useState, useEffect } from "react";
 import ReportingService from "../services/ReportingService";
@@ -10,7 +8,7 @@ const ChartGraph = (data, options) => {
   return (
     <div className="w-5/12 m-auto p-1 ">
       <h2 className="text-xl m-2 text-center font-bold  ">
-        Graphe de pourcentage des technologies
+        Graphe de pourcentage des technologies en %
       </h2>
       <Doughnut options={options} data={data} />
     </div>
@@ -68,14 +66,17 @@ const Technologie = () => {
     fetchData();
     //console.log(datas);
   }, []);
-
   const labels = Array.from(new Set(generateValues(datas)[0]));
+  const datay = coutTechnologies(labels, datas).map(
+    (e) => e * coutTechnologies(labels, datas).reduce((a, b) => a + b, 0)
+  );
+
   const data = {
     labels: labels,
     datasets: [
       {
         label: "Dataset 1",
-        data: coutTechnologies(labels, datas),
+        data: datay,
         backgroundColor: [
           "rgba(255, 99, 132, 0.5)",
           "rgb(54, 162, 235)",
@@ -85,12 +86,12 @@ const Technologie = () => {
           "rgb(245, 73, 25)",
           "rgb(123, 44, 84)",
           "rgb(86, 4, 32)",
-          "rgb(45, 73, 23)",
-          "rgb(45, 73, 45)",
-          "rgb(45, 73, 12)",
-          "rgb(45, 54, 77)",
-          "rgb(45, 78, 99)",
-          "rgb(45, 97, 36)",
+          "rgb(4, 73, 23)",
+          "rgb(5, 7, 45)",
+          "rgb(6, 3, 12)",
+          "rgb(7, 4, 77)",
+          "rgb(8, 8, 99)",
+          "rgb(9, 9, 36)",
         ],
       },
     ],
@@ -123,7 +124,6 @@ const Technologie = () => {
           <ReactBootStrap.Spinner animation="border" />
         </div>
       )}
-      {/* {ChartGraph(data, options)} */}
     </div>
   );
 };

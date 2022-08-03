@@ -67,6 +67,7 @@ const PosteAPPEvolution = () => {
     //console.log(datas);
   }, []);
 
+  console.log(generateValues(datas)[0]);
   console.log(generateValues(datas)[1]);
 
   const columns = [
@@ -79,7 +80,7 @@ const PosteAPPEvolution = () => {
     datasets: [
       {
         label: "Dataset 1",
-        data: generateValues(datas)[1],
+        data: [1, 2, 3, 6],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },

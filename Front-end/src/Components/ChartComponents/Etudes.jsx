@@ -84,12 +84,24 @@ const Etudes = () => {
   const labels1 = Array.from(new Set(generateValues(datas)[0]));
   const labels2 = Array.from(new Set(generateValues(datas)[1]));
   const labels3 = Array.from(new Set(generateValues(datas)[3]));
+  const datay1 = coutByCritere(labels1, datas, "ecole").map(
+    (e) => e * coutByCritere(labels1, datas, "ecole").reduce((a, b) => a + b, 0)
+  );
+  const datay2 = coutByCritere(labels2, datas, "niveau").map(
+    (e) =>
+      e * coutByCritere(labels2, datas, "niveau").reduce((a, b) => a + b, 0)
+  );
+  const datay3 = coutByCritere(labels3, datas, "typeDiplome").map(
+    (e) =>
+      e *
+      coutByCritere(labels3, datas, "typeDiplome").reduce((a, b) => a + b, 0)
+  );
   const data1 = {
     labels: labels1,
     datasets: [
       {
         label: "Dataset 1",
-        data: coutByCritere(labels1, datas, "ecole"),
+        data: datay1,
         backgroundColor: [
           "rgb(84, 34, 88)",
           "rgba(255, 99, 13)",
@@ -105,7 +117,7 @@ const Etudes = () => {
     datasets: [
       {
         label: "Dataset 1",
-        data: coutByCritere(labels2, datas, "niveau"),
+        data: datay2,
         backgroundColor: [
           "rgb(84, 34, 88)",
           "rgb(23, 73, 25)",
@@ -121,7 +133,7 @@ const Etudes = () => {
     datasets: [
       {
         label: "Dataset 1",
-        data: coutByCritere(labels3, datas, "typeDiplome"),
+        data: datay3,
         backgroundColor: [
           "rgb(255, 23, 32)",
           "rgb(73, 81, 12)",
@@ -153,9 +165,9 @@ const Etudes = () => {
         Le pourcentage par études
       </h1>
       <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-3 content-center">
-        {ChartGraph(data1, options, "école")}
-        {ChartGraph(data2, options, "diplôme")}
-        {ChartGraph(data3, options, "type de diplôme")}
+        {ChartGraph(data1, options, "école en %")}
+        {ChartGraph(data2, options, "diplôme en %")}
+        {ChartGraph(data3, options, "type de diplôme en %")}
       </div>
     </div>
   );

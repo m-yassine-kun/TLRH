@@ -2,86 +2,76 @@ import { faker } from "@faker-js/faker";
 import { Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
 
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import * as ReactBootStrap from "react-bootstrap";
+
 const Chart = (data, options, labelsToshow) => {
   return (
-    <div className="w-full p-1 ">
-      <h2 className="text-xl m-2 text-center font-bold  ">
-        Graphe de l'évolution de salaire du collaborateur par année
-      </h2>
+    <div className="w-10/12 p-1 m-auto col-span-2 ">
       <Line options={options} data={data} />
     </div>
   );
 };
-const Table = (labels) => {
-  return (
-    <table className="min-w-full table-auto p-1">
-      <thead className="bg-gray-50">
-        <tr>
-          <th className=" text-left font-medium text-gray-500 upeprcase tracking-wider p-2">
-            Année
-          </th>
-          <th className=" text-left font-medium text-gray-500 upeprcase tracking-wider p-2">
-            Salaire Brut total
-          </th>
-        </tr>
-      </thead>
-      <tbody className="bg-white">
-        {labels.map((e) => (
-          <tr key={e}>
-            <td className="text-left font-medium text-gray-500 upeprcase tracking-wider p-2">
-              {e}
-            </td>
-            <td className="text-left font-medium text-gray-500 upeprcase tracking-wider p-2">
-              {faker.datatype.number({ min: 200, max: 10000 })}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
 
 const moyenneSurDureeData = (startValue, endValue) => {
-  let period = endValue - startValue + 1;
-  let res = ((endValue / startValue) ** (1 / period) - 1) * 100;
+  const end = Date.parse(endValue).valueOf(endValue);
+  const start = Date.parse(startValue).valueOf(startValue);
+  let period = end - start + 1;
+  let res = ((end / start) ** (1 / period) - 1) * 10 ** 13;
+
   return res.toFixed(2);
 };
-
-const generateStartEnd = (startValue, endValue) => {
-  let list = [];
-  for (let i = startValue; i <= endValue; i++) {
-    list.push(i);
-  }
-  return list;
+const ValueofSalaire = (datas) => {
+  const salaire = [];
+  datas.forEach((e) => {
+    salaire.push(e["salaire"]);
+  });
+  return salaire;
 };
 
-const SalaireMoyenne = ({ data, options, name }) => {
+const generateStartEnd = (data, datas, startValue, endValue) => {
+  const res = [];
+  const list1 = [...data["labels"]];
+  const list2 = [...ValueofSalaire(datas)];
+  const indexOfStart = data["labels"].indexOf(startValue);
+  const indexOfEnd = data["labels"].indexOf(endValue) + 1; // depends on array if is it desc or asc
+  res.push(list1.slice(indexOfStart, indexOfEnd));
+  res.push(list2.slice(indexOfStart, indexOfEnd));
+
+  return res;
+};
+
+const SalaireMoyenne = ({ data, datas, options, loading, name }) => {
   const newData = { ...data };
   const labels = newData["labels"];
   const n = labels.length;
   const [dateDebut, setDateDebut] = useState(labels[0]);
   const [dateFin, setDateFin] = useState(labels[n - 1]);
-  const labelsToshow = generateStartEnd(dateDebut, dateFin);
+  const labelsToshow = generateStartEnd(data, datas, dateDebut, dateFin);
+
   const dataToshow = {
-    labels: labelsToshow,
+    labels: labelsToshow[0],
     datasets: [
       {
-        label: "Dataset 1",
-        data: labels.map(() => faker.datatype.number({ min: 200, max: 10000 })),
+        label: "Salaire",
+        data: labelsToshow[1],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Dataset 2",
-        data: labels.map(() => faker.datatype.number({ min: 200, max: 10000 })),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
 
   return (
     <div className="mx-2 my-2 grid grid-cols-2 space-x-2">
+      <h1 className=" text-2xl m-2 mb-4 text-center col-span-2 font-bold ">
+        La moyenne d'évolution de salaire du collaborateur {name} sur ce range
+        est{" "}
+        <span className="text-red-600">
+          {moyenneSurDureeData(dateDebut, dateFin)}
+          {"%"}
+        </span>
+      </h1>
       <form className="w-full m-auto p-4  ">
         <fieldset>
           <div className="relative border border-gray-300 text-gray-800 bg-white shadow-lg">
@@ -98,11 +88,18 @@ const SalaireMoyenne = ({ data, options, name }) => {
               <option key="0" value={labels[0]}>
                 Selectionner Date de début
               </option>
-              {labels.map((l) => (
-                <option key={l} value={l}>
-                  {l}
-                </option>
-              ))}
+              {labels
+                .slice()
+                .reverse()
+                .map(
+                  (l) =>
+                    Date.parse(l).valueOf(l) <
+                      Date.parse(dateFin).valueOf(dateFin) && (
+                      <option key={l} value={l}>
+                        {l}
+                      </option>
+                    )
+                )}
             </select>
             <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center px-2 text-gray-700 border-l">
               <svg
@@ -115,7 +112,7 @@ const SalaireMoyenne = ({ data, options, name }) => {
             </div>
           </div>
         </fieldset>
-        <h1>{dateDebut}</h1>
+        {/* <h1>{dateDebut}</h1> */}
       </form>
       <form className="w-full m-auto p-4  ">
         <fieldset>
@@ -134,15 +131,19 @@ const SalaireMoyenne = ({ data, options, name }) => {
                 Selectionner date de fin
               </option>
 
-              {labels.map(
-                //
-                (l) =>
-                  l >= dateDebut && (
-                    <option key={l} value={l}>
-                      {l}
-                    </option>
-                  )
-              )}
+              {labels
+                .slice()
+                .reverse()
+                .map(
+                  //
+                  (l) =>
+                    Date.parse(l).valueOf(l) >=
+                      Date.parse(dateDebut).valueOf(dateDebut) && (
+                      <option key={l} value={l}>
+                        {l}
+                      </option>
+                    )
+                )}
             </select>
             <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center px-2 text-gray-700 border-l">
               <svg
@@ -155,27 +156,17 @@ const SalaireMoyenne = ({ data, options, name }) => {
             </div>
           </div>
         </fieldset>
-        <h1>{dateFin}</h1>
+        {/* <h1>{dateFin}</h1> */}
       </form>
 
       {/* Components of table and chart of moy Evolution  */}
-
-      <h1 className=" text-2xl m-2 mb-4 text-center col-span-2 font-bold ">
-        La moyenne d'évolution de salaire du collaborateur {name} sur{" "}
-        {dateFin - dateDebut + 1}{" "}
-        {dateFin - dateDebut + 1 < 2 ? "année " : "années "}est{" "}
-        <span className="text-red-600">
-          {moyenneSurDureeData(dateDebut, dateFin)}
-          {"%"}
-        </span>
-      </h1>
-      {Chart(dataToshow, options, labelsToshow)}
-      <div className="w-full p-1">
-        <h2 className="text-xl m-2 text-center font-bold ">
-          Table de l'évolution de salaire du collaborateur par année
-        </h2>
-        {Table(labelsToshow)}
-      </div>
+      {!loading ? (
+        Chart(dataToshow, options, labelsToshow)
+      ) : (
+        <div className="text-center m-auto p-1 ">
+          <ReactBootStrap.Spinner animation="border" />
+        </div>
+      )}
     </div>
   );
 };

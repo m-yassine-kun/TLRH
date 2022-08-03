@@ -6,14 +6,14 @@ import SalaireEvolution from "./SalaireEvolution";
 import SalaireMoyenne from "./SalaireMoyenne";
 
 const generateValues = (dataArray) => {
-  const datePosts = [];
-  const posteName = [];
+  const dateSalaire = [];
+  const salaire = [];
   dataArray.forEach((e) => {
-    datePosts.push(e["dateSalaire"]);
-    posteName.push(e["salaire"]);
+    dateSalaire.push(e["dateSalaire"]);
+    salaire.push(e["salaire"]);
   });
 
-  return [datePosts.reverse(), posteName.reverse()];
+  return [dateSalaire, salaire];
 };
 
 const Salaire = () => {
@@ -43,7 +43,6 @@ const Salaire = () => {
       setDatas(response1.data);
       const response2 = await ReportingService.getCollabById(id);
       setcollab(response2.data);
-      console.log(response2.data);
     } catch (error) {
       console.log(error);
     }
@@ -78,9 +77,9 @@ const Salaire = () => {
         position: "bottom",
       },
       title: {
-        display: false,
-        position: "bottom",
-        text: "Chart.js Line Chart",
+        display: true,
+        position: "top",
+        text: "Graphe de l'évolution de salaire du collaborateur",
       },
     },
   };

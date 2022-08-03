@@ -11,7 +11,7 @@ const ChartGraph = (data, options) => {
   return (
     <div className="w-5/12 m-auto p-1 ">
       <h2 className="text-xl m-2 text-center font-bold  ">
-        Graphe du Ratio Féminin Masculin
+        Graphe du Ratio Féminin Masculin en %
       </h2>
       <Doughnut options={options} data={data} />
     </div>
@@ -40,22 +40,35 @@ const RatioFM = () => {
   };
   useEffect(() => {
     fetchData();
-    //console.log(datas);
   }, []);
 
   const resData = [datas.F, datas.M];
-  //const resData = [12, 34];
+
+  const datay = resData.map((e) => e * resData.reduce((a, b) => a + b, 0));
 
   const data = {
     labels: labels,
     datasets: [
       {
         label: "Dataset 1",
-        //  ReportingService.getSexe()
-        //labels.map(() => faker.datatype.number({ min: 10, max: 100 }))
-        data: resData,
+        data: datay,
 
-        backgroundColor: ["rgba(255, 99, 132, 0.5)", "rgb(54, 162, 235)"],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.5)",
+          "rgb(54, 200, 255)",
+          "rgb(84, 34, 88)",
+          "rgb(23, 44, 66)",
+          "rgb(22, 73, 25)",
+          "rgb(245, 73, 25)",
+          "rgb(123, 44, 84)",
+          "rgb(86, 4, 32)",
+          "rgb(4, 73, 23)",
+          "rgb(5, 7, 45)",
+          "rgb(6, 3, 12)",
+          "rgb(7, 4, 77)",
+          "rgb(8, 8, 99)",
+          "rgb(9, 9, 36)",
+        ],
       },
     ],
   };
